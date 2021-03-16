@@ -54,7 +54,7 @@
       >
         <b-form-input
           id="Alamat"
-          v-model="Form.NoHP"
+          v-model="Form.Alamat"
           type="text"
           placeholder="Tulis Alamat Anda"
           autocomplete="off"
@@ -80,7 +80,7 @@
       <!-- Diantar Dari -->
       <b-form-group
         id="input-group-5"
-        label="Diantar Jam:"
+        label="Diantar Dari:"
         label-for="DiantarDari"
         description="Tulis Diantar Dari Mana"
       >
@@ -151,12 +151,46 @@ export default {
       const datas = [];
       let Total = 0;
       this.Order.map((x) => {
-        if (x[1] !== 0) datas.push(x);
+        if (x[1] !== 0) {
+          console.log(x);
+          datas.push(x);
+        }
       });
       datas.map((x) => {
-        Total += (Number(x[1]*x[2]));
+        Total += Number(x[1] * x[2]);
       });
-      console.log(Total)
+      let pesanan = "";
+      datas.map((x) => {
+        pesanan += `   ${x[0]} - ${x[1]} - ${Number(x[1] * x[2])}`;
+        pesanan += `\r\n`;
+      });
+      let message = "";
+      message += "Form Bulk Order Anti Lapar Club";
+      message += "\r\n";
+      message += "\r\n";
+      message += `Nama: ${this.Form.Nama}`;
+      message += "\r\n";
+      message += `No Hp: ${this.Form.NoHP}`;
+      message += "\r\n";
+      message += `Alamat: ${this.Form.Alamat}`;
+      message += "\r\n";
+      message += `Diantar Jam ${this.Form.DiantarJam}`;
+      message += "\r\n";
+      message += `Diantar Dari: ${this.Form.DiantarDari}`;
+      message += "\r\n";
+      message += `Pesanan:`;
+      message += "\r\n";
+      message += pesanan;
+      message += "\r\n";
+      message += `total: ${Total}`;
+      message += "\r\n";
+      message += "\r\n";
+      message += `Mohon Melakukan Pembayaran dengan Transfer Ke:\r\nNo rek BCA 1234567890 A.N Anti Lapar Club`;
+      message += "\r\n";
+      const encode = encodeURIComponent(message);
+      const phone = process.env.VUE_APP_PHONE
+      window.open(`http://wa.me/${phone}?text=${encode}`, "_blank");
+      
     },
     TakingOrder(value) {
       switch (value.Name) {
